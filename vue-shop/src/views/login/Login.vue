@@ -1,107 +1,177 @@
 <template>
-  <div id="container">
-    <div id="children">
-      <div id="title">
-        <h1>电商后台管理系统</h1>
-      </div>
-      <div class="input">
-        <el-input
-          v-model="name"
-          prefix-icon="el-icon-user"
-          placeholder="请输入用户名"
-        ></el-input>
-      </div>
-      <div class="input">
-        <el-input
-          v-model="password"
-          prefix-icon="el-icon-lock"
-          placeholder="请输入密码"
-          auto-complete="new-password"
-          show-password
-        ></el-input>
-      </div>
-      <div class="input">
-        <el-button
-          @click="login"
-          style="width: 500px"
-          type="primary"
-          :disabled="disabled"
-          >登录</el-button
-        >
-        <!-- <img src="../../assets/logo.png"> -->
-      </div>
-    </div>
+  <div class="login">
+    <el-card>
+      <h2>Login</h2>
+      <el-form
+        class="login-form"
+        :model="model"
+        :rules="rules"
+        ref="form"
+        @submit.native.prevent="login"
+      >
+        <el-form-item prop="username">
+          <el-input v-model="model.username" placeholder="Username"  ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="model.password"
+            placeholder="Password"
+            type="password" 
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :loading="loading"
+            class="login-button"
+            type="primary"
+            native-type="submit"
+            block
+          >Login</el-button>
+        </el-form-item>
+        <a class="forgot-password" href="#">Forgot password ?</a>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script>
-import Storage from "../../tools/Storage";
-import { ElMessage } from "element-plus";
-
+import Storage from '../../tools/Storage'
+import { ElMessage } from 'element-plus';
 export default {
-  name: "Login",
+  name: "login",
   data() {
     return {
-      name: "",
-      password: "",
+      model: {
+        username: "admin",
+        password: "123456"
+      },
+      loading: false,
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "Username is required",
+            trigger: "blur"
+          },
+          {
+            min: 4,
+            message: "Username length should be at least 5 characters",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          { required: true, message: "Password is required", trigger: "blur" },
+          {
+            min: 5,
+            message: "Password length should be at least 5 characters",
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
-  mounted() {
-    this.name = "";
-    this.password = "";
-  },
-  computed: {
-    disabled() {
-      return this.name.length == 0 || this.password.length == 0;
-    },
-  },
   methods: {
-    login() {
-      Storage.commit("registUserInfo", {
-        name: this.name,
-        password: this.password,
-      });
-      ElMessage({
-        message: "登录成功",
-        type: "success",
-        duration: 1500,
-      });
-      setTimeout(() => {
-        this.$router.push({ name: "home" });
-      }, 1500);
+    simulateLogin() {
+      Storage.commit("registUserInfo",{
+                name:this.model.username,
+                password:this.model.password
+            })
     },
-  },
+    async login() {//debugger
+      let valid = await this.$refs.form.validate();
+      if (!valid) {
+        return;
+      }
+      this.loading = true;
+      await this.simulateLogin();
+      this.loading = false;
+     // debugger
+      let  tag=this.model.username='admin'&&this.model.password=='123456';
+      if (  tag   ) {
+        this.$message.success("Login successfull");
+          setTimeout(() => {
+                this.$router.push({name:"home"})
+            }, 1500);
+      } else {
+        this.$message.error("Username or password is invalid");
+      }
+    }
+  }
 };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#container {
-    background: #595959;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background-image: url("../../assets/login_bg.jpg"); 
-}
-#children {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    /* border: 1px yellow solid; */
-    background: white;
-    margin: 2px;
-    text-align: center;
-    border-radius: 20px;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-#title {
-  text-align: center;
-  color: red;
-  margin-top: 200px;
+.login {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.input {
-  margin: 20px auto;
-  width: 500px;
+.login-button {
+  width: 100%;
+  margin-top: 40px;
+}
+.login-form {
+  width: 290px;
+}
+.forgot-password {
+  margin-top: 10px;
+}
+</style>
+<style lang="scss">
+$teal: rgb(0, 124, 137);
+.el-button--primary {
+  background: $teal;
+  border-color: $teal;
+
+  &:hover,
+  &.active,
+  &:focus {
+    background: lighten($teal, 7);
+    border-color: lighten($teal, 7);
+  }
+}
+.login .el-input__inner:hover {
+  border-color: $teal;
+}
+.login .el-input__prefix {
+  background: rgb(238, 237, 234);
+  left: 0;
+  height: calc(100% - 2px);
+  left: 1px;
+  top: 1px;
+  border-radius: 3px;
+  .el-input__icon {
+    width: 30px;
+  }
+}
+.login .el-input input {
+  padding-left: 35px;
+}
+.login .el-card {
+  padding-top: 0;
+  padding-bottom: 30px;
+}
+h2 {
+  font-family: "Open Sans";
+  letter-spacing: 1px;
+  font-family: Roboto, sans-serif;
+  padding-bottom: 20px;
+}
+a {
+  color: $teal;
+  text-decoration: none;
+  &:hover,
+  &:active,
+  &:focus {
+    color: lighten($teal, 7);
+  }
+}
+.login .el-card {
+  width: 340px;
+  display: flex;
+  justify-content: center;
 }
 </style>
