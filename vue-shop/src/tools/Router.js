@@ -2,6 +2,7 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import  Login  from  '../views/login/Login.vue'
 import  Home   from   '../views/home/Home.vue'
 import Order from '../views/order/order.vue'
+import Goods from   '../views/goods/Goods.vue'
 import Store from './Storage'
 const Router = createRouter({
   history: createMemoryHistory(),
@@ -22,8 +23,19 @@ const Router = createRouter({
             path:'order/:type',// 0是普通订单 1是秒杀订单,
             component:Order,
             name:"Order"
-        }],
-       redirect:'/home/order/0'
+        },
+        {
+          path:'goods/:type',// 0是普通商品 1是秒杀商品 2是今日推荐,
+          component:Goods,
+          name:"Goods"
+        },
+        {
+          path:'goods/:type',// 0是普通商品 1是秒杀商品 2是今日推荐,
+          component:Goods,
+          name:"Goods"
+        },
+      ],
+      redirect:'/home/order/0'
     }
   ]
 })
