@@ -15,39 +15,23 @@
 <script>
     export default {
 		name: 'vue-confirm',
-        props: {
-            content: {
-                default: '内容',
-                type: String
-            },
-            cancelText: {
-                default: '取消',
-                type: String
-            },
-            confirmText: {
-                default: '确定',
-                type: String
-            },
-            showCancel: {
-                default: false,
-                type: Boolean
-            },
-            show:{
-                default: false,
-                type: Boolean
-            }
-        },
         data() {
             return {
-
+                content:'',
+                cancelText:'',
+                confirmText:"",
+                showCancel:"",
+                show:''
             }
         },
         methods:{
             confirm(){
-                this.$emit('confirm')
+                this.$emit('confirm');
+                this.show=false;
             },
             cancel(){
-                 this.$emit('cancel')
+                 this.$emit('cancel');
+                 this.show=false;
             }
         }
     }
