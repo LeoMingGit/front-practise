@@ -45,20 +45,20 @@
               <el-menu-item index="/home/goods/0">普通商品</el-menu-item>
               <el-menu-item index="/home/goods/1">秒杀商品</el-menu-item>
               <el-menu-item index="/home/goods/2">今日推荐</el-menu-item>
-              <el-menu-item index="/home/category">商品分类</el-menu-item>
+              <!-- <el-menu-item index="/home/category">商品分类</el-menu-item> -->
             </el-submenu>
-            <el-submenu index="3">
+             <el-submenu index="3">
               <template #title>
                 <i class="el-icon-s-custom"></i>
-                <span>店长管理</span>
+                <span>组件定义</span>
               </template>
-              <el-menu-item index="/home/ownerlist">店长列表</el-menu-item>
-              <el-menu-item index="/home/ownerreq"
+              <el-menu-item index="/home/TestComponents">测试组件</el-menu-item>
+              <!-- <el-menu-item index="/home/ownerreq"
                 >店长申请审批列表</el-menu-item
               >
-              <el-menu-item index="/home/ownerorder">店长订单</el-menu-item>
+              <el-menu-item index="/home/ownerorder">店长订单</el-menu-item> -->
             </el-submenu>
-            <el-submenu index="4">
+            <!-- <el-submenu index="4">
               <template #title>
                 <i class="el-icon-s-ticket"></i>
                 <span>财务管理</span>
@@ -72,7 +72,7 @@
                 <span>基础管理</span>
               </template>
               <el-menu-item index="/home/data">数据统计</el-menu-item>
-            </el-submenu>
+            </el-submenu>  -->
           </el-menu>
         </el-aside>
         <el-container>
