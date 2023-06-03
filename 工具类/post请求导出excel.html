@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Excel导出示例</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <button onclick="exportExcel()">导出Excel</button>
+  <script type="text/javascript">
+    function exportExcel() {
+      var data = [
+          "360322020003",
+          "360322020002",
+          "360322020004"
+        ]; // 请求数据
+
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:7003/mapgis/gm/jx/gmsys_env_collapse_point/exportexcel',
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(data),
+      })
+        .then(response => {
+          var contentDispositionHeader = response.headers['content-disposition'];
+          var matches = /filename\*?=['"]*(?:UTF-\d['"]*)?([^;\r\n"']*)['"]*/i.exec(contentDispositionHeader);
+          var filename;
+          if (matches != null && matches[1]) {
+            filename = decodeURIComponent(matches[1]);
+          }
+          var blob = new Blob([response.data], { type: 'application/octet-stream' });
+          var url = URL.createObjectURL(blob);
+
+          // 创建a标签进行下载
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = filename || 'excel.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        })
+        .catch(error => console.log('Error:', error.message));
+    }
+
+
+  </script>
+</body>
+
+</html>
